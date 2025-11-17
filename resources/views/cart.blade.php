@@ -14,7 +14,7 @@
             <div class="content-row">
                 @foreach($products as $prod)
                     <div class="product_item">
-                        <a href="{{ route('products.show', $prod->id) }}" style="text-decoration: none;">
+                        <a href="products/{{ $prod->id}}" style="text-decoration: none;">
                             <div>
                                 <img src="{{ asset($prod->image)}}" alt="{{$prod->name}}" width='300'>
                             </div>
