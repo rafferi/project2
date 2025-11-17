@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Favorite extends Model
+class Cart extends Model
 {
     protected $fillable = ['user_id', 'product_id'];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasOne(Product::class, 'id', 'product_id');
     }
 }

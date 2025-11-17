@@ -34,6 +34,11 @@
                             <img src="{{ asset('images/icons/favorites.png') }}" alt="Избранное" class="nav-icon">
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('cart.index') }}" title="Корзина">
+                            <img src="{{ asset('images/icons/cart_index.png') }}" alt="Корзина" class="nav-icon">
+                        </a>
+                    </li>
                     <li><a href="/logout">Выход</a></li>
                 @endauth
             </ul>

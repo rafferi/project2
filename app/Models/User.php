@@ -1,5 +1,5 @@
 <?php
-// app/Models/User.php
+
 
 namespace App\Models;
 
@@ -45,5 +45,16 @@ class User extends Authenticatable
     public function favoriteProducts()
     {
         return $this->belongsToMany(Product::class, 'favorites', 'user_id', 'product_id');
+    }
+
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class, 'user_id', 'id');
+    }
+
+    public function cartProducts()
+    {
+        return $this->belongsToMany(Product::class, 'carts', 'user_id', 'product_id');
     }
 }

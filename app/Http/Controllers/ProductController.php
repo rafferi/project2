@@ -127,4 +127,19 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Товар Удален');
     }
+    public function carts()
+    {
+        return $this->hasMany(Cart::class, 'product_id', 'id');
+    }
+
+    public function inCart()
+    {
+        if (!auth()->check()) {
+            return false;
+        }
+
+        return Cart::where('user_id', auth()->id())
+            ->where('product_id', $this->id)
+            ->exists();
+    }
 }

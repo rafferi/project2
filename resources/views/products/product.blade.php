@@ -96,7 +96,12 @@
                     </a>
 
                     @auth
-                        @if(auth()->user()->favoriteProducts->contains($prod->id))
+                        @php
+                            $userFavorites = auth()->user()->favoriteProducts ?? collect();
+                            $userCarts = auth()->user()->cartProducts ?? collect();
+                        @endphp
+
+                        @if($userFavorites->contains($prod->id))
                             <form action="{{ route('favorites.destroy', $prod->id) }}" method="post" class="favorite-form">
                                 @csrf
                                 @method('DELETE')
@@ -109,6 +114,24 @@
                                 @csrf
                                 <button type="submit" class="favorite-btn" title="Добавить в избранное">
                                     <img src="{{ asset('images/icons/dont_like.png') }}" alt="Добавить в избранное" class="favorite-icon">
+                                </button>
+                            </form>
+                        @endif
+
+                        <!-- Кнопки корзины -->
+                        @if($userCarts->contains($prod->id))
+                            <form action="{{ route('cart.destroy', $prod->id) }}" method="post" class="cart-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="cart-btn" title="Убрать из корзины">
+                                    <img src="{{ asset('images/icons/cart_delete.png') }}" alt="Убрать из корзины" class="cart-icon">
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route('cart.store', $prod->id) }}" method="post" class="cart-form">
+                                @csrf
+                                <button type="submit" class="cart-btn" title="Добавить в корзину">
+                                    <img src="{{ asset('images/icons/cart_add.png') }}" alt="Добавить в корзину" class="cart-icon">
                                 </button>
                             </form>
                         @endif

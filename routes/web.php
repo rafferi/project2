@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 
 Route::get('/signup', [UserController::class, 'create'])->name('signup');
 Route::post('/signup', [UserController::class, 'signup']);
@@ -29,6 +30,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
     Route::post('/favorites/{product}', [FavoriteController::class, 'store'])->name('favorites.store');
     Route::delete('/favorites/{product}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
+
+
+
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/{product}', [CartController::class, 'store'])->name('cart.store');
+    Route::delete('/cart/{product}', [CartController::class, 'destroy'])->name('cart.destroy');
 });
 
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
