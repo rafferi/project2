@@ -59,4 +59,10 @@ class CartController extends Controller
         auth()->user()->carts()->where('product_id', $product_id)->delete();
         return back()->with('success', 'Товар удален из корзины');
     }
+
+    public function clear()
+    {
+        auth()->user()->carts()->delete();
+        return back()->with('success', 'Корзина очищена');
+    }
 }

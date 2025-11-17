@@ -11,6 +11,16 @@
         @endif
 
         @if($cartItems->count() > 0)
+            <div style="margin-bottom: 20px;">
+                <form action="{{ route('cart.clear') }}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" style="background: #ff4444; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;">
+                        Очистить всю корзину
+                    </button>
+                </form>
+            </div>
+
             <div class="content-row">
                 @foreach($cartItems as $item)
                     <div class="product_item">
