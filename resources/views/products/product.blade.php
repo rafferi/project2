@@ -99,52 +99,56 @@
                     </a>
 
                     @auth
-                        @if(auth()->user()->favoriteProducts && auth()->user()->favoriteProducts->contains($prod->id))
-                            <form action="{{ route('favorites.destroy', $prod->id) }}" method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" title="Убрать из избранного">
-                                    <img src="{{ asset('images/icons/like.png') }}" alt="Убрать из избранного">
-                                </button>
-                            </form>
-                        @else
-                            <form action="{{ route('favorites.store', $prod->id) }}" method="post">
-                                @csrf
-                                <button type="submit" title="Добавить в избранное">
-                                    <img src="{{ asset('images/icons/dont_like.png') }}" alt="Добавить в избранное">
-                                </button>
-                            </form>
-                        @endif
+                        @if(!auth()->user()->isAdmin())
+                            <!-- Кнопки избранного -->
+                            @if(auth()->user()->favoriteProducts && auth()->user()->favoriteProducts->contains($prod->id))
+                                <form action="{{ route('favorites.destroy', $prod->id) }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" title="Убрать из избранного">
+                                        <img src="{{ asset('images/icons/like.png') }}" alt="Убрать из избранного">
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('favorites.store', $prod->id) }}" method="post">
+                                    @csrf
+                                    <button type="submit" title="Добавить в избранное">
+                                        <img src="{{ asset('images/icons/dont_like.png') }}" alt="Добавить в избранное">
+                                    </button>
+                                </form>
+                            @endif
 
-                        @if(auth()->user()->cartProducts && auth()->user()->cartProducts->contains($prod->id))
-                            @foreach(auth()->user()->carts as $cart)
-                                @if($cart->product_id == $prod->id)
-                                    <div>
-                                        <form action="{{ route('cart.update', $prod->id) }}" method="post" style="display: inline-block;">
-                                            @csrf
-                                            @method('PUT')
-                                            <label>В корзине:</label>
-                                            <input type="number" name="quantity" value="{{ $cart->quantity }}" min="1" max="99" style="width: 50px;">
-                                            <button type="submit">Обновить</button>
-                                        </form>
+                            <!-- Кнопки корзины -->
+                            @if(auth()->user()->cartProducts && auth()->user()->cartProducts->contains($prod->id))
+                                @foreach(auth()->user()->carts as $cart)
+                                    @if($cart->product_id == $prod->id)
+                                        <div>
+                                            <form action="{{ route('cart.update', $prod->id) }}" method="post" style="display: inline-block;">
+                                                @csrf
+                                                @method('PUT')
+                                                <label>В корзине:</label>
+                                                <input type="number" name="quantity" value="{{ $cart->quantity }}" min="1" max="99" style="width: 50px;">
+                                                <button type="submit">Обновить</button>
+                                            </form>
 
-                                        <form action="{{ route('cart.destroy', $prod->id) }}" method="post" style="display: inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" title="Удалить из корзины">
-                                                <img src="{{ asset('images/icons/cart_delete.png') }}" alt="Удалить из корзины">
-                                            </button>
-                                        </form>
-                                    </div>
-                                @endif
-                            @endforeach
-                        @else
-                            <form action="{{ route('cart.store', $prod->id) }}" method="post">
-                                @csrf
-                                <button type="submit" title="Добавить в корзину">
-                                    <img src="{{ asset('images/icons/cart_add.png') }}" alt="Добавить в корзину">
-                                </button>
-                            </form>
+                                            <form action="{{ route('cart.destroy', $prod->id) }}" method="post" style="display: inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" title="Удалить из корзины">
+                                                    <img src="{{ asset('images/icons/cart_delete.png') }}" alt="Удалить из корзины">
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            @else
+                                <form action="{{ route('cart.store', $prod->id) }}" method="post">
+                                    @csrf
+                                    <button type="submit" title="Добавить в корзину">
+                                        <img src="{{ asset('images/icons/cart_add.png') }}" alt="Добавить в корзину">
+                                    </button>
+                                </form>
+                            @endif
                         @endif
                     @endauth
                 </div>

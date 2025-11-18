@@ -34,17 +34,19 @@
                     <li><a href="/login">Вход</a></li>
                 @endguest
                 @auth()
-                    <li>
-                        <a href="{{ route('favorites.index') }}" title="Избранное">
-                            <img src="{{ asset('images/icons/favorites.png') }}" alt="Избранное" class="nav-icon">
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('cart.index') }}" title="Корзина">
-                            <img src="{{ asset('images/icons/cart_index.png') }}" alt="Корзина" class="nav-icon">
-                        </a>
-                    </li>
-                    <li><a href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выход</a></li>
+                    @if(!auth()->user()->isAdmin())
+                        <li>
+                            <a href="{{ route('favorites.index') }}" title="Избранное">
+                                <img src="{{ asset('images/icons/favorites.png') }}" alt="Избранное" class="nav-icon">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('cart.index') }}" title="Корзина">
+                                <img src="{{ asset('images/icons/cart_index.png') }}" alt="Корзина" class="nav-icon">
+                            </a>
+                        </li>
+                    @endif
+                    <li><a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выход</a></li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
