@@ -13,12 +13,14 @@
 
             @auth
                 <div class="product-actions">
-                    <a href="{{ route('products.edit', $data->id) }}">Редактировать</a>
-                    <form action="{{route('products.destroy', $data->id)}}" method="post">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit">Удалить</button>
-                    </form>
+                    @if(auth()->user()->isAdmin())
+                        <a href="{{ route('products.edit', $data->id) }}">Редактировать</a>
+                        <form action="{{route('products.destroy', $data->id)}}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Удалить</button>
+                        </form>
+                    @endif
 
                     @if(auth()->user()->favoriteProducts && auth()->user()->favoriteProducts->contains($data->id))
                         <form action="{{ route('favorites.destroy', $data->id) }}" method="post">

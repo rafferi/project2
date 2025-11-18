@@ -19,11 +19,19 @@ class CategoryController extends Controller
 
     public function create()
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('categories.index')->with('error', 'Доступ запрещен');
+        }
+
         return view('categories.create');
     }
 
     public function store(Request $request)
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('categories.index')->with('error', 'Доступ запрещен');
+        }
+
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255|unique:categories,title',
         ], [
@@ -41,7 +49,6 @@ class CategoryController extends Controller
 
         Category::create([
             'title' => $request->title,
-
         ]);
 
         return redirect()->route('categories.index')->with('success', 'Категория успешно добавлена');
@@ -53,19 +60,26 @@ class CategoryController extends Controller
         $data = (object) [
             'id' => $category->id,
             'title' => $category->title,
-
         ];
         return view('categories.show')->with(["data" => $data]);
     }
 
     public function edit(string $id)
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('categories.index')->with('error', 'Доступ запрещен');
+        }
+
         $category = Category::findOrFail($id);
         return view('categories.edit', compact('category'));
     }
 
     public function update(Request $request, Category $category)
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('categories.index')->with('error', 'Доступ запрещен');
+        }
+
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255|unique:categories,title,' . $category->id,
         ], [
@@ -83,7 +97,6 @@ class CategoryController extends Controller
 
         $category->update([
             'title' => $request->title,
-
         ]);
 
         return redirect()->route('categories.index')->with('success', 'Категория успешно изменена');
@@ -91,6 +104,10 @@ class CategoryController extends Controller
 
     public function destroy(string $id)
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('categories.index')->with('error', 'Доступ запрещен');
+        }
+
         $category = Category::findOrFail($id);
         $category->delete();
         return redirect()->route('categories.index')->with('success', 'Категория удалена');

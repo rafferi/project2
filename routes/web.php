@@ -21,7 +21,7 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::resource('/products', ProductController::class)->except(['index', 'show', 'create']);
     Route::resource('/categories', CategoryController::class)->except(['index']);

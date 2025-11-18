@@ -34,12 +34,20 @@ class ProductController extends Controller
 
     public function create()
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('products.index')->with('error', 'Доступ запрещен');
+        }
+
         $category = Category::all();
         return view('products.create')->with(["category" => $category]);
     }
 
     public function store(Request $request)
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('products.index')->with('error', 'Доступ запрещен');
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
@@ -82,6 +90,10 @@ class ProductController extends Controller
 
     public function edit(string $id)
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('products.index')->with('error', 'Доступ запрещен');
+        }
+
         $pro = Product::find($id);
         $category = Category::all();
         return view('products.edit', compact('pro'))->with(["category" => $category]);
@@ -89,6 +101,10 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('products.index')->with('error', 'Доступ запрещен');
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
@@ -123,23 +139,12 @@ class ProductController extends Controller
 
     public function destroy(string $id)
     {
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('products.index')->with('error', 'Доступ запрещен');
+        }
+
         $product = Product::find($id);
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Товар Удален');
-    }
-    public function carts()
-    {
-        return $this->hasMany(Cart::class, 'product_id', 'id');
-    }
-
-    public function inCart()
-    {
-        if (!auth()->check()) {
-            return false;
-        }
-
-        return Cart::where('user_id', auth()->id())
-            ->where('product_id', $this->id)
-            ->exists();
     }
 }

@@ -13,15 +13,20 @@
         <header>
             <h2>
                 Название проекта
+                @auth
+                    @if(auth()->user()->isAdmin())
+                        <span style="font-size: 14px; color: #ff4444;">(Администратор)</span>
+                    @else
+                        <span style="font-size: 14px; color: #4444ff;">(Пользователь)</span>
+                    @endif
+                @endauth
             </h2>
         </header>
         <nav class="navigation">
             <ul>
-
                 <li><a href="/info">О нас</a></li>
                 <li><a href="/contact">Контакты</a></li>
                 <li><a href="/products">Товары</a></li>
-
                 <li><a href="/categories">Категории</a></li>
 
                 @guest()
@@ -39,10 +44,25 @@
                             <img src="{{ asset('images/icons/cart_index.png') }}" alt="Корзина" class="nav-icon">
                         </a>
                     </li>
-                    <li><a href="/logout">Выход</a></li>
+                    <li><a href="/logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Выход</a></li>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                 @endauth
             </ul>
         </nav>
+
+        @if(session()->has('success'))
+            <div class="alert-success">
+                {{ session()->get('success') }}
+            </div>
+        @endif
+
+        @if(session()->has('error'))
+            <div class="alert-error">
+                {{ session()->get('error') }}
+            </div>
+        @endif
 
         <div class="content">
             @yield('content')

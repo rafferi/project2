@@ -19,6 +19,7 @@ class UserController extends Controller
     {
         $userData = $request->all();
         $userData['password'] = Hash::make($request->password);
+        $userData['role'] = 'user';
 
         User::create($userData);
 

@@ -2,7 +2,9 @@
 @section('title', 'Категории')
 @section('content')
     @auth
-        <a href="{{ route('categories.create') }}">Добавить категорию</a>
+        @if(auth()->user()->isAdmin())
+            <a href="{{ route('categories.create') }}">Добавить категорию</a>
+        @endif
     @endauth
 
     @if(session()->has('success'))
@@ -17,12 +19,14 @@
                 <a href="{{ route('categories.show', $category->id) }}">Просмотр</a>
 
                 @auth
-                    <a href="{{ route('categories.edit', $category->id) }}">Редактировать</a>
-                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit">Удалить</button>
-                    </form>
+                    @if(auth()->user()->isAdmin())
+                        <a href="{{ route('categories.edit', $category->id) }}">Редактировать</a>
+                        <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">Удалить</button>
+                        </form>
+                    @endif
                 @endauth
             </div>
         @endforeach

@@ -2,9 +2,12 @@
 @section('title', 'Товары')
 @section('content')
     <div class="content">
-        @auth()
-            <a href="{{ route('products.create') }}" class="btn btn-primary">Добавить товар</a>
+        @auth
+            @if(auth()->user()->isAdmin())
+                <a href="{{ route('products.create') }}" class="btn btn-primary">Добавить товар</a>
+            @endif
         @endauth
+
         @if(session()->has('success'))
             <div class="alert-success">
                 {{ session()->get('success') }}
@@ -96,7 +99,6 @@
                     </a>
 
                     @auth
-                        <!-- Кнопки избранного -->
                         @if(auth()->user()->favoriteProducts && auth()->user()->favoriteProducts->contains($prod->id))
                             <form action="{{ route('favorites.destroy', $prod->id) }}" method="post">
                                 @csrf
@@ -114,7 +116,6 @@
                             </form>
                         @endif
 
-                        <!-- Кнопки корзины -->
                         @if(auth()->user()->cartProducts && auth()->user()->cartProducts->contains($prod->id))
                             @foreach(auth()->user()->carts as $cart)
                                 @if($cart->product_id == $prod->id)
